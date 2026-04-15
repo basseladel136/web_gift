@@ -1,0 +1,27 @@
+site_name: Auth System Docs
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: pink
+    - scheme: slate
+      primary: black
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.instant
+    - toc.integrate
+    - search.highlight
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - Authentication:
+      - Overview: auth/spec.md
