@@ -3,16 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-   public function category() {
-    return $this->belongsTo(Category::class);
-}
-public function reviews() {
-    return $this->hasMany(Review::class);
-}
-public function wishlistedBy() {
-    return $this->belongsToMany(User::class, 'wishlists');
-}
+    protected $fillable = [
+        'category_id',
+        'name',
+        'description',
+        'price',
+        'stock',
+        'image',
+        'brand',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'price'     => 'decimal:2',
+        'stock'     => 'integer',
+        'is_active' => 'boolean',
+    ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

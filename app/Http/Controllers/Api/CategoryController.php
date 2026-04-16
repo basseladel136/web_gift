@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-   public function index() {
-    return Category::all();
-}
+    /**
+     * List all categories with their product count.
+     */
+    public function index(): JsonResponse
+    {
+        $categories = Category::withCount('products')->get();
+
+        return response()->json([
+            'categories' => $categories,
+        ]);
+    }
 }
