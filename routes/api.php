@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\CouponController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/',      [OrderController::class, 'index']);
         Route::post('/',     [OrderController::class, 'store']);
         Route::get('/{id}',  [OrderController::class, 'show']);
+        // Coupons
+        Route::post('/coupons/apply', [CouponController::class, 'apply']);
     });
 
     /*
@@ -60,10 +63,17 @@ Route::middleware('auth:sanctum')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-   Route::prefix('admin')->middleware('is_admin')->group(function () {
-    Route::post('/categories',        [CategoryController::class, 'store']);
-    Route::post('/products',          [ProductController::class, 'store']);
-    Route::put('/products/{id}',      [ProductController::class, 'update']);
-    Route::delete('/products/{id}',   [ProductController::class, 'destroy']);
-});
+    Route::prefix('admin')->middleware('is_admin')->group(function () {
+        // inside Route::prefix('admin')->middleware('is_admin')
+        Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+        Route::post('/categories',        [CategoryController::class, 'store']);
+        Route::post('/products',          [ProductController::class, 'store']);
+        Route::put('/products/{id}',      [ProductController::class, 'update']);
+        Route::delete('/products/{id}',   [ProductController::class, 'destroy']);
+        // Coupons
+        Route::get('/coupons',          [CouponController::class, 'index']);
+        Route::post('/coupons',         [CouponController::class, 'store']);
+        Route::put('/coupons/{id}',     [CouponController::class, 'update']);
+        Route::delete('/coupons/{id}',  [CouponController::class, 'destroy']);
+    });
 });
