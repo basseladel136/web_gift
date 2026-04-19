@@ -14,7 +14,7 @@ class ApplyCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['required', 'string', 'exists:coupons,code'],
+            'code' => ['required', 'string'],
         ];
     }
 }

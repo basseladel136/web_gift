@@ -9,6 +9,7 @@ use App\Http\Requests\Coupon\UpdateCouponRequest;
 use App\Models\CartItem;
 use App\Models\Coupon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
@@ -33,7 +34,7 @@ class CouponController extends Controller
 
         return response()->json([
             'message' => 'Coupon created successfully.',
-            'coupon' => $coupon,
+            'coupon'  => $coupon,
         ], 201);
     }
 
@@ -47,7 +48,7 @@ class CouponController extends Controller
 
         return response()->json([
             'message' => 'Coupon updated successfully.',
-            'coupon' => $coupon,
+            'coupon'  => $coupon,
         ]);
     }
 
@@ -80,10 +81,16 @@ class CouponController extends Controller
         }
 
         $subtotal = $cartItems->sum(
-            fn ($item) => $item->product->price * $item->quantity
+            fn($item) => $item->product->price * $item->quantity
         );
 
-        $coupon = Coupon::where('code', $request->code)->firstOrFail();
+        $coupon = Coupon::where('code', $request->code)->first();
+
+        if (! $coupon) {
+            return response()->json([
+                'message' => 'Invalid coupon code'
+            ], 422);
+        }
 
         if (! $coupon->isValid($subtotal)) {
             return response()->json([
@@ -92,14 +99,14 @@ class CouponController extends Controller
         }
 
         $discount = $coupon->calculateDiscount($subtotal);
-        $total = max(0, $subtotal - $discount);
+        $total    = max(0, $subtotal - $discount);
 
         return response()->json([
-            'message' => 'Coupon applied successfully.',
-            'coupon' => $coupon->code,
-            'subtotal' => round($subtotal, 2),
-            'discount' => $discount,
-            'total' => round($total, 2),
+            'message'   => 'Coupon applied successfully.',
+            'coupon'    => $coupon->code,
+            'subtotal'  => round($subtotal, 2),
+            'discount'  => $discount,
+            'total'     => round($total, 2),
         ]);
     }
 

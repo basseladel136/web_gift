@@ -11,6 +11,9 @@ use App\Models\OrderItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Mail\OrderPlacedMail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderStatusUpdatedMail;
 
 class OrderController extends Controller
 {
@@ -124,6 +127,8 @@ class OrderController extends Controller
 
             return $order;
         });
+        // Send order confirmation email
+        Mail::to($request->user()->email)->queue(new OrderPlacedMail($order->load('items.product', 'user')));
 
         return response()->json([
             'message' => 'Order placed successfully.',
@@ -156,7 +161,8 @@ class OrderController extends Controller
 
         $order = Order::findOrFail($id);
         $order->update(['status' => $request->status]);
-
+        // Notify user of status change
+        Mail::to($order->user->email)->queue(new OrderStatusUpdatedMail($order->load('user')));
         return response()->json([
             'message' => 'Order status updated.',
             'order' => $order,

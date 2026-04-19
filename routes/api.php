@@ -7,7 +7,8 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CouponController;
-
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\WishlistController;
 /*
 |--------------------------------------------------------------------------
 | Public Routes — No authentication required
@@ -24,6 +25,9 @@ Route::prefix('auth')->group(function () {
 Route::get('/categories',    [CategoryController::class, 'index']);
 Route::get('/products',      [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
+
+// Reviews (anyone can read)
+Route::get('/products/{productId}/reviews', [ReviewController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
@@ -50,11 +54,25 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Orders
     Route::prefix('orders')->group(function () {
-        Route::get('/',      [OrderController::class, 'index']);
-        Route::post('/',     [OrderController::class, 'store']);
-        Route::get('/{id}',  [OrderController::class, 'show']);
-        // Coupons
-        Route::post('/coupons/apply', [CouponController::class, 'apply']);
+        Route::get('/',     [OrderController::class, 'index']);
+        Route::post('/',    [OrderController::class, 'store']);
+        Route::get('/{id}', [OrderController::class, 'show']);
+    });
+
+    // Coupons
+    Route::post('/coupons/apply', [CouponController::class, 'apply']);
+
+    // Reviews (authenticated users)
+    Route::post('/products/{productId}/reviews',   [ReviewController::class, 'store']);
+    Route::put('/products/{productId}/reviews',    [ReviewController::class, 'update']);
+    Route::delete('/products/{productId}/reviews', [ReviewController::class, 'destroy']);
+
+    // Wishlist
+    Route::prefix('wishlist')->group(function () {
+        Route::get('/',                    [WishlistController::class, 'index']);
+        Route::post('/add',                [WishlistController::class, 'add']);
+        Route::delete('/remove/{id}',      [WishlistController::class, 'remove']);
+        Route::post('/move-to-cart/{id}',  [WishlistController::class, 'moveToCart']);
     });
 
     /*
@@ -64,16 +82,22 @@ Route::middleware('auth:sanctum')->group(function () {
     */
 
     Route::prefix('admin')->middleware('is_admin')->group(function () {
-        // inside Route::prefix('admin')->middleware('is_admin')
+
+        // Orders
         Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
-        Route::post('/categories',        [CategoryController::class, 'store']);
-        Route::post('/products',          [ProductController::class, 'store']);
-        Route::put('/products/{id}',      [ProductController::class, 'update']);
-        Route::delete('/products/{id}',   [ProductController::class, 'destroy']);
+
+        // Categories
+        Route::post('/categories', [CategoryController::class, 'store']);
+
+        // Products
+        Route::post('/products',        [ProductController::class, 'store']);
+        Route::put('/products/{id}',    [ProductController::class, 'update']);
+        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
         // Coupons
-        Route::get('/coupons',          [CouponController::class, 'index']);
-        Route::post('/coupons',         [CouponController::class, 'store']);
-        Route::put('/coupons/{id}',     [CouponController::class, 'update']);
-        Route::delete('/coupons/{id}',  [CouponController::class, 'destroy']);
+        Route::get('/coupons',         [CouponController::class, 'index']);
+        Route::post('/coupons',        [CouponController::class, 'store']);
+        Route::put('/coupons/{id}',    [CouponController::class, 'update']);
+        Route::delete('/coupons/{id}', [CouponController::class, 'destroy']);
     });
 });
