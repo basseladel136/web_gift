@@ -1,0 +1,15 @@
+name: WinnyLand
+values:
+  - key: base_url
+    value: ""
+    enabled: true
+  - key: token
+    value: ""
+    enabled: true
+  - key: admin_token
+    value: ""
+    enabled: true
+  - key: ""
+    value: ""
+    enabled: true
+color: null

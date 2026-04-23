@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\WishlistController;
+use App\Http\Controllers\Api\AnalyticsController;
+use App\Http\Controllers\Api\PushNotificationController;
 /*
 |--------------------------------------------------------------------------
 | Public Routes — No authentication required
@@ -28,6 +30,9 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 
 // Reviews (anyone can read)
 Route::get('/products/{productId}/reviews', [ReviewController::class, 'index']);
+
+// Public — frontend needs this to subscribe
+Route::get('/push/vapid-public-key', [PushNotificationController::class, 'vapidPublicKey']);
 
 /*
 |--------------------------------------------------------------------------
@@ -99,5 +104,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/coupons',        [CouponController::class, 'store']);
         Route::put('/coupons/{id}',    [CouponController::class, 'update']);
         Route::delete('/coupons/{id}', [CouponController::class, 'destroy']);
+
+        // Analytics
+        Route::get('/analytics/sales',     [AnalyticsController::class, 'sales']);
+        Route::get('/analytics/customers', [AnalyticsController::class, 'customers']);
     });
 });

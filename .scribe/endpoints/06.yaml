@@ -1,0 +1,328 @@
+name: Orders
+description: |-
+
+  APIs for placing and managing orders.
+  All endpoints require authentication.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/orders
+    metadata:
+      custom: []
+      groupName: Orders
+      groupDescription: |-
+
+        APIs for placing and managing orders.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List my orders'
+      description: 'Returns all orders for the authenticated user.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "orders": [
+              {
+                "id": 1,
+                "status": "pending",
+                "subtotal": "1000.00",
+                "discount": "100.00",
+                "total": "900.00",
+                "gift_message": "Happy Birthday!",
+                "payment_status": "unpaid",
+                "created_at": "2026-04-22T10:00:00.000000Z",
+                "items": []
+              }
+            ]
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/orders
+    metadata:
+      custom: []
+      groupName: Orders
+      groupDescription: |-
+
+        APIs for placing and managing orders.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Place an order'
+      description: |-
+        Places a new order from the authenticated user's cart.
+        Cart is cleared automatically after the order is placed.
+        Stock is deducted for each item.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      gift_message:
+        custom: []
+        name: gift_message
+        description: 'optional A personal gift message.'
+        required: false
+        example: 'Happy Birthday!'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      coupon_code:
+        custom: []
+        name: coupon_code
+        description: 'optional A valid coupon code.'
+        required: false
+        example: SAVE10
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      gift_message: 'Happy Birthday!'
+      coupon_code: SAVE10
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "message": "Order placed successfully.",
+            "order": {
+              "id": 1,
+              "status": "pending",
+              "subtotal": "1000.00",
+              "discount": "100.00",
+              "total": "900.00",
+              "gift_message": "Happy Birthday!",
+              "payment_status": "unpaid",
+              "items": []
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Your cart is empty." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Coupon is invalid or expired." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Insufficient stock for \"Rolex\". Only 2 left." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/orders/{id}'
+    metadata:
+      custom: []
+      groupName: Orders
+      groupDescription: |-
+
+        APIs for placing and managing orders.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get single order'
+      description: 'Returns details of a specific order belonging to the authenticated user.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'Order ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "order": {
+              "id": 1,
+              "status": "pending",
+              "total": "900.00",
+              "items": []
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{ "message": "No query results for model [Order] 1" }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/admin/orders/{id}/status'
+    metadata:
+      custom: []
+      groupName: Orders
+      groupDescription: |-
+
+        APIs for placing and managing orders.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update order status (Admin)'
+      description: 'Updates the status of any order. Sends email notification to the customer.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'Order ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        custom: []
+        name: status
+        description: 'New order status.'
+        required: true
+        example: |-
+          confirmed
+          Allowed values: pending, confirmed, processing, shipped, delivered, cancelled
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      status: |-
+        confirmed
+        Allowed values: pending, confirmed, processing, shipped, delivered, cancelled
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Order status updated.",
+            "order": {
+              "id": 1,
+              "status": "confirmed"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{ "message": "No query results for model [Order] 1" }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "The status field is required." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

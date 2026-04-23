@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: 0d1d16ea-e48b-4201-81d8-0fcc9e9e8b52
+
+cloudResources:
+  environments:
+    ..\postman\environments\WinnyLand.environment.yaml: 45053809-4d4e6c3c-4517-496b-9967-7a83940f08bc
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

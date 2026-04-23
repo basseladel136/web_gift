@@ -3,15 +3,44 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\Wishlist;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Wishlist
+ *
+ * APIs for managing the wishlist.
+ * All endpoints require authentication.
+ *
+ * @authenticated
+ */
 class WishlistController extends Controller
 {
     /**
-     * List all wishlist items for the authenticated user.
+     * View wishlist
+     *
+     * Returns all products in the authenticated user's wishlist.
+     *
+     * @response 200 {
+     *   "wishlist": [
+     *     {
+     *       "id": 1,
+     *       "product": {
+     *         "id": 1,
+     *         "name": "Rolex Submariner",
+     *         "price": "5000.00",
+     *         "image": "rolex.jpg",
+     *         "brand": "Rolex",
+     *         "stock": 10,
+     *         "category": "Watches"
+     *       }
+     *     }
+     *   ],
+     *   "total": 1
+     * }
      */
     public function index(Request $request): JsonResponse
     {
@@ -21,7 +50,7 @@ class WishlistController extends Controller
             ->get();
 
         return response()->json([
-            'wishlist' => $items->map(fn ($item) => [
+            'wishlist' => $items->map(fn($item) => [
                 'id'      => $item->id,
                 'product' => [
                     'id'       => $item->product->id,
@@ -38,7 +67,18 @@ class WishlistController extends Controller
     }
 
     /**
-     * Add a product to the wishlist.
+     * Add to wishlist
+     *
+     * Adds a product to the authenticated user's wishlist.
+     *
+     * @bodyParam product_id integer required Product ID. Example: 1
+     *
+     * @response 201 {
+     *   "message": "Product added to wishlist.",
+     *   "item": { "id": 1, "user_id": 1, "product_id": 1 }
+     * }
+     * @response 422 { "message": "Product is already in your wishlist." }
+     * @response 404 { "message": "No query results for model [Product] 1" }
      */
     public function add(Request $request): JsonResponse
     {
@@ -55,7 +95,7 @@ class WishlistController extends Controller
 
         if ($already) {
             return response()->json([
-                'message' => 'Product is already in your wishlist.',
+                'message' => __('messages.wishlist_exists'),
             ], 422);
         }
 
@@ -65,13 +105,20 @@ class WishlistController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Product added to wishlist.',
+            'message' => __('messages.wishlist_added'),
             'item'    => $item,
         ], 201);
     }
 
     /**
-     * Remove a product from the wishlist.
+     * Remove from wishlist
+     *
+     * Removes a product from the authenticated user's wishlist.
+     *
+     * @urlParam id integer required Wishlist item ID. Example: 1
+     *
+     * @response 200 { "message": "Product removed from wishlist." }
+     * @response 404 { "message": "No query results for model [Wishlist]" }
      */
     public function remove(Request $request, int $id): JsonResponse
     {
@@ -82,12 +129,22 @@ class WishlistController extends Controller
         $item->delete();
 
         return response()->json([
-            'message' => 'Product removed from wishlist.',
+            'message' => __('messages.wishlist_removed'),
         ]);
     }
 
     /**
-     * Move a wishlist item directly to the cart.
+     * Move to cart
+     *
+     * Moves a wishlist item directly to the cart and removes it from the wishlist.
+     *
+     * @urlParam id integer required Wishlist item ID. Example: 1
+     *
+     * @response 200 { "message": "Product moved to cart." }
+     * @response 422 { "message": "This product is no longer available." }
+     * @response 422 { "message": "This product is out of stock." }
+     * @response 422 { "message": "Only 5 items available in stock." }
+     * @response 404 { "message": "No query results for model [Wishlist]" }
      */
     public function moveToCart(Request $request, int $id): JsonResponse
     {
@@ -100,18 +157,17 @@ class WishlistController extends Controller
 
         if (! $product->is_active) {
             return response()->json([
-                'message' => 'This product is no longer available.',
+                'message' => __('messages.product_unavailable'),
             ], 422);
         }
 
         if ($product->stock < 1) {
             return response()->json([
-                'message' => 'This product is out of stock.',
+                'message' => __('messages.product_out_of_stock'),
             ], 422);
         }
 
-        // Add to cart or increment if already there
-        $cartItem = \App\Models\CartItem::where('user_id', $request->user()->id)
+        $cartItem = CartItem::where('user_id', $request->user()->id)
             ->where('product_id', $product->id)
             ->first();
 
@@ -120,24 +176,23 @@ class WishlistController extends Controller
 
             if ($newQuantity > $product->stock) {
                 return response()->json([
-                    'message' => "Only {$product->stock} items available in stock.",
+                    'message' => __('messages.stock_exceeded', ['stock' => $product->stock]),
                 ], 422);
             }
 
             $cartItem->update(['quantity' => $newQuantity]);
         } else {
-            \App\Models\CartItem::create([
+            CartItem::create([
                 'user_id'    => $request->user()->id,
                 'product_id' => $product->id,
                 'quantity'   => 1,
             ]);
         }
 
-        // Remove from wishlist
         $item->delete();
 
         return response()->json([
-            'message' => 'Product moved to cart.',
+            'message' => __('messages.wishlist_moved'),
         ]);
     }
 }

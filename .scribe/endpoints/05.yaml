@@ -1,0 +1,304 @@
+name: Cart
+description: |-
+
+  APIs for managing the shopping cart.
+  All endpoints require authentication.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/cart
+    metadata:
+      custom: []
+      groupName: Cart
+      groupDescription: |-
+
+        APIs for managing the shopping cart.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'View cart'
+      description: 'Returns all cart items with subtotals and total price.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "items": [
+              {
+                "id": 1,
+                "quantity": 2,
+                "subtotal": 10000.00,
+                "product": {
+                  "id": 1,
+                  "name": "Rolex Submariner",
+                  "price": "5000.00",
+                  "image": "rolex.jpg",
+                  "brand": "Rolex",
+                  "stock": 8,
+                  "category": "Watches"
+                }
+              }
+            ],
+            "total": 10000.00,
+            "item_count": 2
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/cart/add
+    metadata:
+      custom: []
+      groupName: Cart
+      groupDescription: |-
+
+        APIs for managing the shopping cart.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Add item to cart'
+      description: |-
+        Adds a product to the cart. If the product already exists,
+        the quantity will be incremented.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      product_id:
+        custom: []
+        name: product_id
+        description: 'Product ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      quantity:
+        custom: []
+        name: quantity
+        description: 'Quantity to add.'
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      product_id: 1
+      quantity: 2
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "message": "Item added to cart.",
+            "cart_item": {
+              "id": 1,
+              "product_id": 1,
+              "quantity": 2
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Only 5 items available in stock." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/cart/update
+    metadata:
+      custom: []
+      groupName: Cart
+      groupDescription: |-
+
+        APIs for managing the shopping cart.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update cart item quantity'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      product_id:
+        custom: []
+        name: product_id
+        description: 'Product ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      quantity:
+        custom: []
+        name: quantity
+        description: 'New quantity.'
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      product_id: 1
+      quantity: 3
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Cart updated.",
+            "cart_item": {
+              "id": 1,
+              "product_id": 1,
+              "quantity": 3
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{ "message": "No query results for model [CartItem]" }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Only 5 items available in stock." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/cart/remove/{id}'
+    metadata:
+      custom: []
+      groupName: Cart
+      groupDescription: |-
+
+        APIs for managing the shopping cart.
+        All endpoints require authentication.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove item from cart'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'Cart item ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{ "message": "Item removed from cart." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{ "message": "Cart item not found." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

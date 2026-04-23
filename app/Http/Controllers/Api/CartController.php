@@ -10,10 +10,41 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Cart
+ *
+ * APIs for managing the shopping cart.
+ * All endpoints require authentication.
+ *
+ * @authenticated
+ */
 class CartController extends Controller
 {
     /**
-     * View the authenticated user's cart with total price.
+     * View cart
+     *
+     * Returns all cart items with subtotals and total price.
+     *
+     * @response 200 {
+     *   "items": [
+     *     {
+     *       "id": 1,
+     *       "quantity": 2,
+     *       "subtotal": 10000.00,
+     *       "product": {
+     *         "id": 1,
+     *         "name": "Rolex Submariner",
+     *         "price": "5000.00",
+     *         "image": "rolex.jpg",
+     *         "brand": "Rolex",
+     *         "stock": 8,
+     *         "category": "Watches"
+     *       }
+     *     }
+     *   ],
+     *   "total": 10000.00,
+     *   "item_count": 2
+     * }
      */
     public function index(Request $request): JsonResponse
     {
@@ -21,10 +52,10 @@ class CartController extends Controller
             ->where('user_id', $request->user()->id)
             ->get();
 
-        $total = $items->sum(fn ($item) => $item->product->price * $item->quantity);
+        $total = $items->sum(fn($item) => $item->product->price * $item->quantity);
 
         return response()->json([
-            'items' => $items->map(fn ($item) => [
+            'items' => $items->map(fn($item) => [
                 'id'       => $item->id,
                 'quantity' => $item->quantity,
                 'subtotal' => round($item->product->price * $item->quantity, 2),
@@ -44,8 +75,23 @@ class CartController extends Controller
     }
 
     /**
-     * Add a product to the cart.
-     * If it already exists, increment the quantity.
+     * Add item to cart
+     *
+     * Adds a product to the cart. If the product already exists,
+     * the quantity will be incremented.
+     *
+     * @bodyParam product_id integer required Product ID. Example: 1
+     * @bodyParam quantity integer required Quantity to add. Example: 2
+     *
+     * @response 201 {
+     *   "message": "Item added to cart.",
+     *   "cart_item": {
+     *     "id": 1,
+     *     "product_id": 1,
+     *     "quantity": 2
+     *   }
+     * }
+     * @response 422 { "message": "Only 5 items available in stock." }
      */
     public function add(AddToCartRequest $request): JsonResponse
     {
@@ -61,7 +107,7 @@ class CartController extends Controller
 
             if ($newQuantity > $product->stock) {
                 return response()->json([
-                    'message' => "Only {$product->stock} items available in stock.",
+                    'message' => __('messages.stock_exceeded', ['stock' => $product->stock]),
                 ], 422);
             }
 
@@ -69,7 +115,7 @@ class CartController extends Controller
         } else {
             if ($request->quantity > $product->stock) {
                 return response()->json([
-                    'message' => "Only {$product->stock} items available in stock.",
+                    'message' => __('messages.stock_exceeded', ['stock' => $product->stock]),
                 ], 422);
             }
 
@@ -81,7 +127,7 @@ class CartController extends Controller
         }
 
         return response()->json([
-            'message'  => 'Item added to cart.',
+            'message'   => __('messages.cart_item_added'),
             'cart_item' => [
                 'id'         => $cartItem->id,
                 'product_id' => $cartItem->product_id,
@@ -91,7 +137,21 @@ class CartController extends Controller
     }
 
     /**
-     * Update the quantity of a cart item.
+     * Update cart item quantity
+     *
+     * @bodyParam product_id integer required Product ID. Example: 1
+     * @bodyParam quantity integer required New quantity. Example: 3
+     *
+     * @response 200 {
+     *   "message": "Cart updated.",
+     *   "cart_item": {
+     *     "id": 1,
+     *     "product_id": 1,
+     *     "quantity": 3
+     *   }
+     * }
+     * @response 422 { "message": "Only 5 items available in stock." }
+     * @response 404 { "message": "No query results for model [CartItem]" }
      */
     public function update(UpdateCartRequest $request): JsonResponse
     {
@@ -103,14 +163,14 @@ class CartController extends Controller
 
         if ($request->quantity > $product->stock) {
             return response()->json([
-                'message' => "Only {$product->stock} items available in stock.",
+                'message' => __('messages.stock_exceeded', ['stock' => $product->stock]),
             ], 422);
         }
 
         $cartItem->update(['quantity' => $request->quantity]);
 
         return response()->json([
-            'message'  => 'Cart updated.',
+            'message'   => __('messages.cart_item_updated'),
             'cart_item' => [
                 'id'         => $cartItem->id,
                 'product_id' => $cartItem->product_id,
@@ -120,18 +180,29 @@ class CartController extends Controller
     }
 
     /**
-     * Remove an item from the cart.
+     * Remove item from cart
+     *
+     * @urlParam id integer required Cart item ID. Example: 1
+     *
+     * @response 200 { "message": "Item removed from cart." }
+     * @response 404 { "message": "Cart item not found." }
      */
     public function remove(Request $request, int $id): JsonResponse
     {
         $cartItem = CartItem::where('user_id', $request->user()->id)
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
+
+        if (! $cartItem) {
+            return response()->json([
+                'message' => 'Cart item not found.',
+            ], 404);
+        }
 
         $cartItem->delete();
 
         return response()->json([
-            'message' => 'Item removed from cart.',
+            'message' => __('messages.cart_item_removed'),
         ]);
     }
 }

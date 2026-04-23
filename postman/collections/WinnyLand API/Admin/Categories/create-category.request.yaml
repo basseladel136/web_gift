@@ -1,0 +1,86 @@
+$kind: http-request
+name: Create Category
+method: POST
+url: '{{base_url}}/admin/categories'
+order: 1000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{admin_token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Electronics",
+      "description": "All electronic products"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const status = pm.response.code;
+      const json = pm.response.json();
+
+      if (status === 201) {
+          pm.test("201 Created: response contains id", () => {
+              pm.expect(json).to.have.property("id");
+          });
+
+          pm.test("201 Created: response contains name", () => {
+              pm.expect(json).to.have.property("name");
+          });
+
+          pm.test("201 Created: response contains slug", () => {
+              pm.expect(json).to.have.property("slug");
+          });
+
+          pm.test("201 Created: response contains description", () => {
+              pm.expect(json).to.have.property("description");
+          });
+
+          pm.test("201 Created: name matches sent value", () => {
+              const sentBody = JSON.parse(pm.request.body.raw);
+              pm.expect(json.name).to.eql(sentBody.name);
+          });
+
+          pm.test("201 Created: slug is a string", () => {
+              pm.expect(json.slug).to.be.a("string");
+          });
+
+      } else if (status === 422) {
+          pm.test("422 Unprocessable Entity: response has errors or message", () => {
+              pm.expect(json).to.satisfy(body => body.errors || body.message);
+          });
+
+          pm.test("422 Unprocessable Entity: errors reference 'name' field", () => {
+              if (json.errors) {
+                  pm.expect(json.errors).to.have.property("name");
+              } else {
+                  pm.expect(json.message).to.be.a("string");
+              }
+          });
+
+      } else if (status === 401) {
+          pm.test("401 Unauthorized: response message indicates unauthorized", () => {
+              pm.expect(json).to.have.property("message");
+              pm.expect(json.message.toLowerCase()).to.include("unauthorized");
+          });
+
+      } else if (status === 403) {
+          pm.test("403 Forbidden: response message indicates forbidden/not admin", () => {
+              pm.expect(json).to.have.property("message");
+              const msg = json.message.toLowerCase();
+              pm.expect(msg).to.satisfy(m => m.includes("forbidden") || m.includes("admin") || m.includes("unauthorized"));
+          });
+
+      } else {
+          pm.test(`Unexpected status code: ${status}`, () => {
+              pm.expect(status).to.be.oneOf([201, 422, 401, 403]);
+          });
+      }

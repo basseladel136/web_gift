@@ -32,7 +32,7 @@ class OrderStatusUpdatedMail extends Mailable implements ShouldQueue
 
     public function statusLabel(): string
     {
-        return match ($this->order->status) {
+        return match($this->order->status) {
             'confirmed'  => 'Order Confirmed',
             'processing' => 'Being Processed',
             'shipped'    => 'On The Way',

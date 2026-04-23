@@ -1,0 +1,54 @@
+name: 'Push Notifications'
+description: |-
+
+  APIs for managing push notification subscriptions.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/push/vapid-public-key
+    metadata:
+      custom: []
+      groupName: 'Push Notifications'
+      groupDescription: |-
+
+        APIs for managing push notification subscriptions.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get VAPID public key'
+      description: |-
+        Returns the VAPID public key needed by the frontend
+        to subscribe to push notifications.
+        No authentication required.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "public_key": "BDUru1Ct9b6Eyzit9FK4..."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

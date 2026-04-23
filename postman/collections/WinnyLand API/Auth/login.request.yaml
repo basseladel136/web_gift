@@ -1,0 +1,106 @@
+$kind: http-request
+name: Login
+method: POST
+url: '{{base_url}}/auth/login'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com",
+      "password": "password"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const statusCode = pm.response.code;
+      const json = pm.response.json();
+
+      // ─── 200 OK — Login successful ───────────────────────────────────────────
+      if (statusCode === 200) {
+
+          pm.test("Status code is 200", function () {
+              pm.response.to.have.status(200);
+          });
+
+          pm.test("Response has message 'Login successful.'", function () {
+              pm.expect(json.message).to.eql("Login successful.");
+          });
+
+          pm.test("Response contains user object", function () {
+              pm.expect(json).to.have.property("user");
+              pm.expect(json.user).to.be.an("object");
+          });
+
+          pm.test("user.id is a number", function () {
+              pm.expect(json.user.id).to.be.a("number");
+          });
+
+          pm.test("user.name is a string", function () {
+              pm.expect(json.user.name).to.be.a("string");
+          });
+
+          pm.test("user.email is a string", function () {
+              pm.expect(json.user.email).to.be.a("string");
+          });
+
+          pm.test("Response contains non-empty token", function () {
+              pm.expect(json.token).to.be.a("string").and.to.have.length.above(0);
+          });
+
+          pm.test("token_type is 'Bearer'", function () {
+              pm.expect(json.token_type).to.eql("Bearer");
+          });
+
+          // Save token to environment
+          pm.environment.set("token", json.token);
+
+      // ─── 422 Unprocessable Entity — Validation failure ───────────────────────
+      } else if (statusCode === 422) {
+
+          pm.test("Status code is 422 (Validation Error)", function () {
+              pm.response.to.have.status(422);
+          });
+
+          pm.test("Response contains errors or message field", function () {
+              const hasErrors  = json.hasOwnProperty("errors");
+              const hasMessage = json.hasOwnProperty("message");
+              pm.expect(hasErrors || hasMessage).to.be.true;
+          });
+
+          pm.test("Validation errors reference email or password", function () {
+              if (json.errors) {
+                  const fields = Object.keys(json.errors);
+                  const relevant = fields.some(f => ["email", "password"].includes(f));
+                  pm.expect(relevant).to.be.true;
+              } else {
+                  // message-only validation response is acceptable
+                  pm.expect(json.message).to.be.a("string").and.to.have.length.above(0);
+              }
+          });
+
+      // ─── 401 Unauthorized — Invalid credentials ──────────────────────────────
+      } else if (statusCode === 401) {
+
+          pm.test("Status code is 401 (Unauthorized)", function () {
+              pm.response.to.have.status(401);
+          });
+
+          pm.test("Response message is 'Invalid credentials. Please check your email and password.'", function () {
+              pm.expect(json.message).to.eql("Invalid credentials. Please check your email and password.");
+          });
+
+      // ─── Unexpected status ────────────────────────────────────────────────────
+      } else {
+
+          pm.test("Unexpected status code: " + statusCode, function () {
+              pm.expect([200, 401, 422]).to.include(statusCode);
+          });
+
+      }

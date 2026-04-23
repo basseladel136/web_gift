@@ -1,0 +1,509 @@
+name: Coupons
+description: |-
+
+  APIs for managing and applying discount coupons.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/coupons/apply
+    metadata:
+      custom: []
+      groupName: Coupons
+      groupDescription: |-
+
+        APIs for managing and applying discount coupons.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Apply a coupon'
+      description: |-
+        Preview the discount a coupon gives against the current cart.
+        Does not place an order — use this before checkout to show the user the discount.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
+        custom: []
+        name: code
+        description: 'Coupon code to apply.'
+        required: true
+        example: SAVE10
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      code: SAVE10
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Coupon applied successfully.",
+            "coupon": "SAVE10",
+            "subtotal": 1000.00,
+            "discount": 100.00,
+            "total": 900.00
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Your cart is empty." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "Coupon is invalid or expired." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "This coupon has expired." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "This coupon has reached its usage limit." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "A minimum order of 100 is required to use this coupon." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/admin/coupons
+    metadata:
+      custom: []
+      groupName: Coupons
+      groupDescription: |-
+
+        APIs for managing and applying discount coupons.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all coupons (Admin)'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "coupons": [
+              {
+                "id": 1,
+                "code": "SAVE10",
+                "type": "percent",
+                "value": "10.00",
+                "min_order_amount": "100.00",
+                "max_uses": 50,
+                "used_count": 5,
+                "is_active": true,
+                "expires_at": "2026-12-31T00:00:00.000000Z"
+              }
+            ]
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/admin/coupons
+    metadata:
+      custom: []
+      groupName: Coupons
+      groupDescription: |-
+
+        APIs for managing and applying discount coupons.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create a coupon (Admin)'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
+        custom: []
+        name: code
+        description: 'Unique coupon code.'
+        required: true
+        example: SAVE10
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: 'Discount type: percent or fixed.'
+        required: true
+        example: percent
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      value:
+        custom: []
+        name: value
+        description: 'Discount value.'
+        required: true
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      min_order_amount:
+        custom: []
+        name: min_order_amount
+        description: 'optional Minimum order amount required.'
+        required: false
+        example: 100.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      max_uses:
+        custom: []
+        name: max_uses
+        description: 'optional Maximum number of uses.'
+        required: false
+        example: 50
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: 'optional Whether coupon is active.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      expires_at:
+        custom: []
+        name: expires_at
+        description: 'optional Expiry date.'
+        required: false
+        example: '2026-12-31'
+        type: date
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      code: SAVE10
+      type: percent
+      value: 10.0
+      min_order_amount: 100.0
+      max_uses: 50
+      is_active: true
+      expires_at: '2026-12-31'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "message": "Coupon created successfully.",
+            "coupon": {
+              "id": 1,
+              "code": "SAVE10",
+              "type": "percent",
+              "value": "10.00"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{ "message": "The code has already been taken." }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/admin/coupons/{id}'
+    metadata:
+      custom: []
+      groupName: Coupons
+      groupDescription: |-
+
+        APIs for managing and applying discount coupons.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update a coupon (Admin)'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'Coupon ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
+        custom: []
+        name: code
+        description: 'optional Coupon code.'
+        required: false
+        example: SAVE20
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: 'optional Discount type: percent or fixed.'
+        required: false
+        example: fixed
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      value:
+        custom: []
+        name: value
+        description: 'optional Discount value.'
+        required: false
+        example: 50.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      min_order_amount:
+        custom: []
+        name: min_order_amount
+        description: 'optional Minimum order amount.'
+        required: false
+        example: 200.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      max_uses:
+        custom: []
+        name: max_uses
+        description: 'optional Maximum uses.'
+        required: false
+        example: 100
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: 'optional Whether coupon is active.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      expires_at:
+        custom: []
+        name: expires_at
+        description: 'optional Expiry date.'
+        required: false
+        example: '2027-01-01'
+        type: date
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      code: SAVE20
+      type: fixed
+      value: 50.0
+      min_order_amount: 200.0
+      max_uses: 100
+      is_active: false
+      expires_at: '2027-01-01'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Coupon updated successfully.",
+            "coupon": {}
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{ "message": "No query results for model [Coupon] 1" }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/admin/coupons/{id}'
+    metadata:
+      custom: []
+      groupName: Coupons
+      groupDescription: |-
+
+        APIs for managing and applying discount coupons.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete a coupon (Admin)'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer your-token-here'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'Coupon ID.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{ "message": "Coupon deleted successfully." }'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{ "message": "No query results for model [Coupon] 1" }'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

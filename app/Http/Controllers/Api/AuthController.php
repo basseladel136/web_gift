@@ -11,95 +11,126 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @group Authentication
+ *
+ * APIs for managing authentication
+ */
 class AuthController extends Controller
 {
     /**
-     * Register a new user.
+     * Register a new user
+     *
+     * @response 201 {
+     *   "message": "Registration successful.",
+     *   "user": { "id": 1, "name": "Bassel", "email": "bassel@test.com" },
+     *   "token": "1|abc123",
+     *   "token_type": "Bearer"
+     * }
      */
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Registration successful.',
-            'user'    => [
-                'id'    => $user->id,
-                'name'  => $user->name,
+            'message' => __('messages.register_success'),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
                 'email' => $user->email,
             ],
-            'token'      => $token,
+            'token' => $token,
             'token_type' => 'Bearer',
         ], 201);
     }
 
     /**
-     * Log in an existing user.
+     * Login
+     *
+     * @response 200 {
+     *   "message": "Login successful.",
+     *   "user": { "id": 1, "name": "Bassel", "email": "bassel@test.com" },
+     *   "token": "1|abc123",
+     *   "token_type": "Bearer"
+     * }
+     * @response 401 { "message": "Invalid credentials." }
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Invalid credentials. Please check your email and password.',
+                'message' => __('messages.invalid_credentials'),
             ], 401);
         }
 
-        $user  = Auth::user();
+        $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Login successful.',
-            'user'    => [
-                'id'    => $user->id,
-                'name'  => $user->name,
+            'message' => __('messages.login_success'),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
                 'email' => $user->email,
             ],
-            'token'      => $token,
+            'token' => $token,
             'token_type' => 'Bearer',
         ]);
     }
 
     /**
-     * Get the authenticated user's profile.
+     * Get profile
+     *
+     * @authenticated
+     * @response 200 {
+     *   "user": { "id": 1, "name": "Bassel", "email": "bassel@test.com" }
+     * }
      */
     public function profile(Request $request): JsonResponse
     {
         return response()->json([
             'user' => [
-                'id'         => $request->user()->id,
-                'name'       => $request->user()->name,
-                'email'      => $request->user()->email,
+                'id' => $request->user()->id,
+                'name' => $request->user()->name,
+                'email' => $request->user()->email,
                 'created_at' => $request->user()->created_at,
             ],
         ]);
     }
 
     /**
-     * Log out the authenticated user (revoke current token).
+     * Logout
+     *
+     * @authenticated
+     * @response 200 { "message": "Logged out successfully." }
      */
     public function logout(Request $request): JsonResponse
     {
-          $request->user()->tokens()->delete();
+        $request->user()->tokens()->delete();
 
         return response()->json([
-            'message' => 'Logged out successfully.',
+            'message' => __('messages.logout_success'),
         ]);
     }
 
     /**
-     * Log out from all devices (revoke all tokens).
+     * Logout from all devices
+     *
+     * @authenticated
+     * @response 200 { "message": "Logged out from all devices successfully." }
      */
     public function logoutAll(Request $request): JsonResponse
     {
         $request->user()->tokens()->delete();
 
         return response()->json([
-            'message' => 'Logged out from all devices successfully.',
+            'message' => __('messages.logout_all_success'),
         ]);
     }
 }
