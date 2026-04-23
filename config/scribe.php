@@ -14,7 +14,7 @@ return [
     'title' => 'Winny Land API',
 
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
-   'description' => 'REST API for Gifts Store — Watches, Perfumes & Gifts. Built with Laravel.',
+    'description' => 'REST API for Gifts Store — Watches, Perfumes & Gifts. Built with Laravel.',
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<'INTRO'
@@ -26,17 +26,17 @@ return [
 
     // The base URL displayed in the docs.
     // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
-  'base_url' => env('APP_URL', 'http://localhost:8000'),
+    'base_url' => 'http://localhost:8000',
     // Routes to include in the docs
-   'routes' => [
-    [
-        'match' => [
-            'prefixes' => ['api/*'],
-            'domains' => ['*'],
+    'routes' => [
+        [
+            'match' => [
+                'prefixes' => ['api/*'],
+                'domains' => ['*'],
+            ],
+            'exclude' => [],
         ],
-        'exclude' => [],
     ],
-],
 
     // The type of documentation output to generate.
     // - "static" will generate a static HTMl page in the /public/docs folder,
@@ -90,15 +90,15 @@ return [
     ],
 
     // How is your API authenticated? This information will be used in the displayed docs, generated examples and response calls.
-   'auth' => [
-    'enabled' => true,
-    'default' => true,
-    'in' => 'bearer',
-    'name' => 'Authorization',
-    'use_value' => env('SCRIBE_AUTH_KEY'),
-    'placeholder' => 'your-token-here',
-    'extra_info' => 'Get your token from POST /api/auth/login',
-],
+    'auth' => [
+        'enabled' => true,
+        'default' => true,
+        'in' => 'bearer',
+        'name' => 'Authorization',
+        'use_value' => env('SCRIBE_AUTH_KEY'),
+        'placeholder' => 'your-token-here',
+        'extra_info' => 'Get your token from POST /api/auth/login',
+    ],
 
     // Example requests for each endpoint will be shown in each of these languages.
     // Supported options are: bash, javascript, php, python
@@ -171,9 +171,9 @@ return [
     'last_updated' => 'Last updated: {date:F j, Y}',
 
 
-'examples' => [
-    'faker_seed' => 1234,
-],
+    'examples' => [
+        'faker_seed' => 1234,
+    ],
 
     // The strategies Scribe will use to extract information about your routes at each stage.
     // Use configureStrategy() to specify settings for a strategy in the list.

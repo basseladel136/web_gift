@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "http://localhost";
+        var tryItOutBaseUrl = "http://localhost:8000";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -253,7 +253,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 22, 2026</li>
+        <li>Last updated: April 23, 2026</li>
     </ul>
 </div>
 
@@ -263,7 +263,7 @@
         <h1 id="introduction">Introduction</h1>
 <p>REST API for Gifts Store — Watches, Perfumes &amp; Gifts. Built with Laravel.</p>
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost</code>
+    <strong>Base URL</strong>: <code>http://localhost:8000</code>
 </aside>
 <pre><code>This documentation aims to provide all the information you need to work with our API.
 
@@ -295,7 +295,7 @@ revenue chart, top products, orders by status, and recent orders.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/admin/analytics/sales?period=month" \
+    --get "http://localhost:8000/api/admin/analytics/sales?period=month" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -303,7 +303,7 @@ revenue chart, top products, orders by status, and recent orders.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/analytics/sales"
+    "http://localhost:8000/api/admin/analytics/sales"
 );
 
 const params = {
@@ -486,7 +486,7 @@ top spenders, and most reviewed products.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/admin/analytics/customers?period=month" \
+    --get "http://localhost:8000/api/admin/analytics/customers?period=month" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -494,7 +494,7 @@ top spenders, and most reviewed products.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/analytics/customers"
+    "http://localhost:8000/api/admin/analytics/customers"
 );
 
 const params = {
@@ -662,21 +662,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/auth/register" \
+    "http://localhost:8000/api/auth/register" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"b\",
-    \"email\": \"zbailey@example.net\",
-    \"password\": \"-0pBNvYgxw\"
+    \"name\": \"Bassel Adel\",
+    \"email\": \"bassel@test.com\",
+    \"password\": \"password123\",
+    \"password_confirmation\": \"password123\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/auth/register"
+    "http://localhost:8000/api/auth/register"
 );
 
 const headers = {
@@ -686,9 +687,10 @@ const headers = {
 };
 
 let body = {
-    "name": "b",
-    "email": "zbailey@example.net",
-    "password": "-0pBNvYgxw"
+    "name": "Bassel Adel",
+    "email": "bassel@test.com",
+    "password": "password123",
+    "password_confirmation": "password123"
 };
 
 fetch(url, {
@@ -808,10 +810,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-auth-register"
-               value="b"
+               value="Bassel Adel"
                data-component="body">
     <br>
-<p>Must be at least 2 characters. Must not be greater than 100 characters. Example: <code>b</code></p>
+<p>The user's full name. Must be at least 2 characters. Must not be greater than 100 characters. Example: <code>Bassel Adel</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -820,10 +822,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-auth-register"
-               value="zbailey@example.net"
+               value="bassel@test.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>zbailey@example.net</code></p>
+<p>The user's email address. Must be a valid email address. Must not be greater than 255 characters. Example: <code>bassel@test.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -832,10 +834,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-auth-register"
-               value="-0pBNvYgxw"
+               value="password123"
                data-component="body">
     <br>
-<p>Must be at least 8 characters. Example: <code>-0pBNvYgxw</code></p>
+<p>The user's password (min 8 characters). Must be at least 8 characters. Example: <code>password123</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password_confirmation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password_confirmation"                data-endpoint="POSTapi-auth-register"
+               value="password123"
+               data-component="body">
+    <br>
+<p>Must match password. Must be at least 8 characters. Example: <code>password123</code></p>
         </div>
         </form>
 
@@ -853,20 +867,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/auth/login" \
+    "http://localhost:8000/api/auth/login" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"gbailey@example.net\",
-    \"password\": \"|]|{+-\"
+    \"email\": \"bassel@test.com\",
+    \"password\": \"password123\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/auth/login"
+    "http://localhost:8000/api/auth/login"
 );
 
 const headers = {
@@ -876,8 +890,8 @@ const headers = {
 };
 
 let body = {
-    "email": "gbailey@example.net",
-    "password": "|]|{+-"
+    "email": "bassel@test.com",
+    "password": "password123"
 };
 
 fetch(url, {
@@ -1006,10 +1020,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-auth-login"
-               value="gbailey@example.net"
+               value="bassel@test.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Example: <code>gbailey@example.net</code></p>
+<p>The user's email address. Must be a valid email address. Example: <code>bassel@test.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -1018,10 +1032,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-auth-login"
-               value="|]|{+-"
+               value="password123"
                data-component="body">
     <br>
-<p>Example: <code>|]|{+-</code></p>
+<p>The user's password. Example: <code>password123</code></p>
         </div>
         </form>
 
@@ -1039,7 +1053,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/auth/profile" \
+    --get "http://localhost:8000/api/auth/profile" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1047,7 +1061,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/auth/profile"
+    "http://localhost:8000/api/auth/profile"
 );
 
 const headers = {
@@ -1178,7 +1192,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/auth/logout" \
+    "http://localhost:8000/api/auth/logout" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1186,7 +1200,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/auth/logout"
+    "http://localhost:8000/api/auth/logout"
 );
 
 const headers = {
@@ -1313,7 +1327,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/auth/logout-all" \
+    "http://localhost:8000/api/auth/logout-all" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1321,7 +1335,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/auth/logout-all"
+    "http://localhost:8000/api/auth/logout-all"
 );
 
 const headers = {
@@ -1453,7 +1467,7 @@ All endpoints require authentication.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/cart" \
+    --get "http://localhost:8000/api/cart" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1461,7 +1475,7 @@ All endpoints require authentication.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/cart"
+    "http://localhost:8000/api/cart"
 );
 
 const headers = {
@@ -1606,7 +1620,7 @@ the quantity will be incremented.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/cart/add" \
+    "http://localhost:8000/api/cart/add" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1619,7 +1633,7 @@ the quantity will be incremented.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/cart/add"
+    "http://localhost:8000/api/cart/add"
 );
 
 const headers = {
@@ -1790,7 +1804,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/cart/update" \
+    "http://localhost:8000/api/cart/update" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1803,7 +1817,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/cart/update"
+    "http://localhost:8000/api/cart/update"
 );
 
 const headers = {
@@ -1983,7 +1997,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/cart/remove/1" \
+    "http://localhost:8000/api/cart/remove/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1991,7 +2005,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/cart/remove/1"
+    "http://localhost:8000/api/cart/remove/1"
 );
 
 const headers = {
@@ -2144,7 +2158,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/categories" \
+    --get "http://localhost:8000/api/categories" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2152,7 +2166,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/categories"
+    "http://localhost:8000/api/categories"
 );
 
 const headers = {
@@ -2287,7 +2301,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/admin/categories" \
+    "http://localhost:8000/api/admin/categories" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2300,7 +2314,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/categories"
+    "http://localhost:8000/api/admin/categories"
 );
 
 const headers = {
@@ -2477,7 +2491,7 @@ Does not place an order — use this before checkout to show the user the discou
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/coupons/apply" \
+    "http://localhost:8000/api/coupons/apply" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2489,7 +2503,7 @@ Does not place an order — use this before checkout to show the user the discou
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/coupons/apply"
+    "http://localhost:8000/api/coupons/apply"
 );
 
 const headers = {
@@ -2682,7 +2696,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/admin/coupons" \
+    --get "http://localhost:8000/api/admin/coupons" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2690,7 +2704,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/coupons"
+    "http://localhost:8000/api/admin/coupons"
 );
 
 const headers = {
@@ -2829,7 +2843,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/admin/coupons" \
+    "http://localhost:8000/api/admin/coupons" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2847,7 +2861,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/coupons"
+    "http://localhost:8000/api/admin/coupons"
 );
 
 const headers = {
@@ -3094,7 +3108,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/admin/coupons/1" \
+    "http://localhost:8000/api/admin/coupons/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3112,7 +3126,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/coupons/1"
+    "http://localhost:8000/api/admin/coupons/1"
 );
 
 const headers = {
@@ -3367,7 +3381,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/admin/coupons/1" \
+    "http://localhost:8000/api/admin/coupons/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3375,7 +3389,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/coupons/1"
+    "http://localhost:8000/api/admin/coupons/1"
 );
 
 const headers = {
@@ -3529,7 +3543,7 @@ All endpoints require authentication.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/orders" \
+    --get "http://localhost:8000/api/orders" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3537,7 +3551,7 @@ All endpoints require authentication.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/orders"
+    "http://localhost:8000/api/orders"
 );
 
 const headers = {
@@ -3678,7 +3692,7 @@ Stock is deducted for each item.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/orders" \
+    "http://localhost:8000/api/orders" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3691,7 +3705,7 @@ Stock is deducted for each item.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/orders"
+    "http://localhost:8000/api/orders"
 );
 
 const headers = {
@@ -3885,7 +3899,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/orders/1" \
+    --get "http://localhost:8000/api/orders/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3893,7 +3907,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/orders/1"
+    "http://localhost:8000/api/orders/1"
 );
 
 const headers = {
@@ -4047,7 +4061,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/admin/orders/1/status" \
+    "http://localhost:8000/api/admin/orders/1/status" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -4059,7 +4073,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/orders/1/status"
+    "http://localhost:8000/api/admin/orders/1/status"
 );
 
 const headers = {
@@ -4243,7 +4257,7 @@ Allowed values: pending, confirmed, processing, shipped, delivered, cancelled"
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/products?category_id=1&amp;brand=Rolex&amp;min_price=100&amp;max_price=5000&amp;search=rolex" \
+    --get "http://localhost:8000/api/products?category_id=1&amp;brand=Rolex&amp;min_price=100&amp;max_price=5000&amp;search=rolex" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4251,7 +4265,7 @@ Allowed values: pending, confirmed, processing, shipped, delivered, cancelled"
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products"
+    "http://localhost:8000/api/products"
 );
 
 const params = {
@@ -4466,7 +4480,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/products/1" \
+    --get "http://localhost:8000/api/products/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4474,7 +4488,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products/1"
+    "http://localhost:8000/api/products/1"
 );
 
 const headers = {
@@ -4636,7 +4650,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/admin/products" \
+    "http://localhost:8000/api/admin/products" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -4655,7 +4669,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/products"
+    "http://localhost:8000/api/admin/products"
 );
 
 const headers = {
@@ -4909,7 +4923,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/admin/products/1" \
+    "http://localhost:8000/api/admin/products/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -4919,8 +4933,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"description\": \"Eius et animi quos velit et.\",
     \"price\": 4500,
     \"stock\": 8,
-    \"image\": \"l\",
-    \"brand\": \"j\",
+    \"image\": \"v\",
+    \"brand\": \"d\",
     \"is_active\": true
 }"
 </code></pre></div>
@@ -4928,7 +4942,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/products/1"
+    "http://localhost:8000/api/admin/products/1"
 );
 
 const headers = {
@@ -4943,8 +4957,8 @@ let body = {
     "description": "Eius et animi quos velit et.",
     "price": 4500,
     "stock": 8,
-    "image": "l",
-    "brand": "j",
+    "image": "v",
+    "brand": "d",
     "is_active": true
 };
 
@@ -5141,10 +5155,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="image"                data-endpoint="PUTapi-admin-products--id-"
-               value="l"
+               value="v"
                data-component="body">
     <br>
-<p>Must not be greater than 500 characters. Example: <code>l</code></p>
+<p>Must not be greater than 500 characters. Example: <code>v</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>brand</code></b>&nbsp;&nbsp;
@@ -5153,10 +5167,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="brand"                data-endpoint="PUTapi-admin-products--id-"
-               value="j"
+               value="d"
                data-component="body">
     <br>
-<p>Must not be greater than 100 characters. Example: <code>j</code></p>
+<p>Must not be greater than 100 characters. Example: <code>d</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_active</code></b>&nbsp;&nbsp;
@@ -5196,7 +5210,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/admin/products/1" \
+    "http://localhost:8000/api/admin/products/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5204,7 +5218,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/admin/products/1"
+    "http://localhost:8000/api/admin/products/1"
 );
 
 const headers = {
@@ -5359,7 +5373,7 @@ No authentication required.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/push/vapid-public-key" \
+    --get "http://localhost:8000/api/push/vapid-public-key" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5367,7 +5381,7 @@ No authentication required.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/push/vapid-public-key"
+    "http://localhost:8000/api/push/vapid-public-key"
 );
 
 const headers = {
@@ -5499,7 +5513,7 @@ Available to everyone — no authentication required.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/products/1/reviews" \
+    --get "http://localhost:8000/api/products/1/reviews" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5507,7 +5521,7 @@ Available to everyone — no authentication required.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products/1/reviews"
+    "http://localhost:8000/api/products/1/reviews"
 );
 
 const headers = {
@@ -5672,7 +5686,7 @@ Only one review per product per user is allowed.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/products/1/reviews" \
+    "http://localhost:8000/api/products/1/reviews" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -5685,7 +5699,7 @@ Only one review per product per user is allowed.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products/1/reviews"
+    "http://localhost:8000/api/products/1/reviews"
 );
 
 const headers = {
@@ -5891,7 +5905,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/products/1/reviews" \
+    "http://localhost:8000/api/products/1/reviews" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -5904,7 +5918,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products/1/reviews"
+    "http://localhost:8000/api/products/1/reviews"
 );
 
 const headers = {
@@ -6092,7 +6106,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/products/1/reviews" \
+    "http://localhost:8000/api/products/1/reviews" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6100,7 +6114,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products/1/reviews"
+    "http://localhost:8000/api/products/1/reviews"
 );
 
 const headers = {
@@ -6254,7 +6268,7 @@ All endpoints require authentication.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/wishlist" \
+    --get "http://localhost:8000/api/wishlist" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6262,7 +6276,7 @@ All endpoints require authentication.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/wishlist"
+    "http://localhost:8000/api/wishlist"
 );
 
 const headers = {
@@ -6403,7 +6417,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/wishlist/add" \
+    "http://localhost:8000/api/wishlist/add" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -6415,7 +6429,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/wishlist/add"
+    "http://localhost:8000/api/wishlist/add"
 );
 
 const headers = {
@@ -6582,7 +6596,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/wishlist/remove/1" \
+    "http://localhost:8000/api/wishlist/remove/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6590,7 +6604,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/wishlist/remove/1"
+    "http://localhost:8000/api/wishlist/remove/1"
 );
 
 const headers = {
@@ -6739,7 +6753,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/wishlist/move-to-cart/1" \
+    "http://localhost:8000/api/wishlist/move-to-cart/1" \
     --header "Authorization: Bearer your-token-here" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6747,7 +6761,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/wishlist/move-to-cart/1"
+    "http://localhost:8000/api/wishlist/move-to-cart/1"
 );
 
 const headers = {

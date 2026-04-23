@@ -1,5 +1,8 @@
 <?php
-
+if (isset($_SERVER['APP_ENV']) && $_SERVER['APP_ENV'] === 'testing') {
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__), '.env.testing');
+    $dotenv->load();
+}
 return [
 
     /*

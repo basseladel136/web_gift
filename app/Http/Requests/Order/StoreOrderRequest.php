@@ -18,4 +18,17 @@ class StoreOrderRequest extends FormRequest
             'coupon_code'  => ['nullable', 'string', 'exists:coupons,code'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'gift_message' => [
+                'description' => 'Optional gift message to include with the order.',
+                'example'     => 'Happy Birthday!',
+            ],
+            'coupon_code' => [
+                'description' => 'Optional coupon code to apply a discount.',
+                'example'     => 'SAVE10',
+            ],
+        ];
+    }
 }

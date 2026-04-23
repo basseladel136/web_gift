@@ -24,4 +24,41 @@ class StoreProductRequest extends FormRequest
             'is_active'   => ['boolean'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'category_id' => [
+                'description' => 'Category ID.',
+                'example'     => 1,
+            ],
+            'name' => [
+                'description' => 'Product name.',
+                'example'     => 'Rolex Submariner',
+            ],
+            'description' => [
+                'description' => 'Product description.',
+                'example'     => 'Luxury dive watch.',
+            ],
+            'price' => [
+                'description' => 'Product price.',
+                'example'     => 5000.00,
+            ],
+            'stock' => [
+                'description' => 'Stock quantity.',
+                'example'     => 10,
+            ],
+            'brand' => [
+                'description' => 'Brand name.',
+                'example'     => 'Rolex',
+            ],
+            'image' => [
+                'description' => 'Image filename.',
+                'example'     => 'rolex.jpg',
+            ],
+            'is_active' => [
+                'description' => 'Whether product is active.',
+                'example'     => true,
+            ],
+        ];
+    }
 }

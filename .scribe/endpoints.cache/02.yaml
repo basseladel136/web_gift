@@ -445,7 +445,7 @@ endpoints:
         name: image
         description: 'Must not be greater than 500 characters.'
         required: false
-        example: l
+        example: v
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -456,7 +456,7 @@ endpoints:
         name: brand
         description: 'Must not be greater than 100 characters.'
         required: false
-        example: j
+        example: d
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -479,8 +479,8 @@ endpoints:
       description: 'Eius et animi quos velit et.'
       price: 4500.0
       stock: 8
-      image: l
-      brand: j
+      image: v
+      brand: d
       is_active: true
     fileParameters: []
     responses:

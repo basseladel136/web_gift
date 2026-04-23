@@ -23,4 +23,29 @@ class UpdateCouponRequest extends FormRequest
             'expires_at'       => ['nullable', 'date', 'after:today'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'code' => [
+                'description' => 'Coupon code.',
+                'example'     => 'SAVE20',
+            ],
+            'type' => [
+                'description' => 'Discount type: percent or fixed.',
+                'example'     => 'fixed',
+            ],
+            'value' => [
+                'description' => 'Discount value.',
+                'example'     => 50,
+            ],
+            'is_active' => [
+                'description' => 'Whether coupon is active.',
+                'example'     => false,
+            ],
+            'expires_at' => [
+                'description' => 'Expiry date.',
+                'example'     => '2027-01-01',
+            ],
+        ];
+    }
 }

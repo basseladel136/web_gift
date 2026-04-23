@@ -18,4 +18,17 @@ class UpdateCartRequest extends FormRequest
             'quantity'   => ['required', 'integer', 'min:1'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'product_id' => [
+                'description' => 'The product ID to update.',
+                'example'     => 1,
+            ],
+            'quantity' => [
+                'description' => 'New quantity.',
+                'example'     => 3,
+            ],
+        ];
+    }
 }

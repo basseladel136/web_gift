@@ -18,4 +18,17 @@ class StoreReviewRequest extends FormRequest
             'comment' => ['nullable', 'string', 'max:1000'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'rating' => [
+                'description' => 'Rating from 1 to 5.',
+                'example'     => 5,
+            ],
+            'comment' => [
+                'description' => 'Optional review comment.',
+                'example'     => 'Amazing product!',
+            ],
+        ];
+    }
 }

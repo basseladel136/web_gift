@@ -32,9 +32,9 @@ endpoints:
       name:
         custom: []
         name: name
-        description: 'Must be at least 2 characters. Must not be greater than 100 characters.'
+        description: "The user's full name. Must be at least 2 characters. Must not be greater than 100 characters."
         required: true
-        example: b
+        example: 'Bassel Adel'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -43,9 +43,9 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        description: "The user's email address. Must be a valid email address. Must not be greater than 255 characters."
         required: true
-        example: zbailey@example.net
+        example: bassel@test.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -54,18 +54,30 @@ endpoints:
       password:
         custom: []
         name: password
-        description: 'Must be at least 8 characters.'
+        description: "The user's password (min 8 characters). Must be at least 8 characters."
         required: true
-        example: '-0pBNvYgxw'
+        example: password123
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password_confirmation:
+        custom: []
+        name: password_confirmation
+        description: 'Must match password. Must be at least 8 characters.'
+        required: true
+        example: password123
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      name: b
-      email: zbailey@example.net
-      password: '-0pBNvYgxw'
+      name: 'Bassel Adel'
+      email: bassel@test.com
+      password: password123
+      password_confirmation: password123
     fileParameters: []
     responses:
       -
@@ -117,9 +129,9 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Must be a valid email address.'
+        description: "The user's email address. Must be a valid email address."
         required: true
-        example: gbailey@example.net
+        example: bassel@test.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -128,17 +140,17 @@ endpoints:
       password:
         custom: []
         name: password
-        description: ''
+        description: "The user's password."
         required: true
-        example: '|]|{+-'
+        example: password123
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      email: gbailey@example.net
-      password: '|]|{+-'
+      email: bassel@test.com
+      password: password123
     fileParameters: []
     responses:
       -

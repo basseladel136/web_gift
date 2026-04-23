@@ -23,4 +23,33 @@ class StoreCouponRequest extends FormRequest
             'expires_at'       => ['nullable', 'date', 'after:today'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'code' => [
+                'description' => 'Unique coupon code.',
+                'example'     => 'SAVE10',
+            ],
+            'type' => [
+                'description' => 'Discount type: percent or fixed.',
+                'example'     => 'percent',
+            ],
+            'value' => [
+                'description' => 'Discount value.',
+                'example'     => 10,
+            ],
+            'min_order_amount' => [
+                'description' => 'Minimum order amount required.',
+                'example'     => 100,
+            ],
+            'max_uses' => [
+                'description' => 'Maximum number of uses.',
+                'example'     => 50,
+            ],
+            'expires_at' => [
+                'description' => 'Expiry date.',
+                'example'     => '2026-12-31',
+            ],
+        ];
+    }
 }

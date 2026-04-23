@@ -18,4 +18,17 @@ class AddToCartRequest extends FormRequest
             'quantity'   => ['required', 'integer', 'min:1'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'product_id' => [
+                'description' => 'The product ID to add.',
+                'example'     => 1,
+            ],
+            'quantity' => [
+                'description' => 'Quantity to add.',
+                'example'     => 2,
+            ],
+        ];
+    }
 }

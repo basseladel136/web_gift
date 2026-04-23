@@ -17,4 +17,13 @@ class ApplyCouponRequest extends FormRequest
             'code' => ['required', 'string'],
         ];
     }
+    public function bodyParameters(): array
+    {
+        return [
+            'code' => [
+                'description' => 'Coupon code to apply.',
+                'example'     => 'SAVE10',
+            ],
+        ];
+    }
 }
