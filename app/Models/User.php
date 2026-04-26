@@ -16,7 +16,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin',
+        // Note: is_admin must NOT be here — use forceFill() or direct assignment only
     ];
 
     protected $hidden = [

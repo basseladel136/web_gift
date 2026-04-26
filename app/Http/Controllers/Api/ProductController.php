@@ -8,6 +8,7 @@ use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @group Products
@@ -45,38 +46,38 @@ class ProductController extends Controller
      *   "total": 50
      * }
      */
-    public function index(Request $request): JsonResponse
-    {
+public function index(Request $request): JsonResponse
+{
+    $cacheKey = 'products_' . md5(json_encode($request->all()));
+
+    $products = Cache::remember($cacheKey, 300, function () use ($request) {
         $query = Product::with('category')->where('is_active', true);
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->integer('category_id'));
         }
-
         if ($request->filled('brand')) {
             $query->where('brand', $request->string('brand'));
         }
-
         if ($request->filled('min_price')) {
             $query->where('price', '>=', $request->input('min_price'));
         }
-
         if ($request->filled('max_price')) {
             $query->where('price', '<=', $request->input('max_price'));
         }
-
         if ($request->filled('search')) {
             $search = $request->string('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'ILIKE', "%{$search}%")
-                  ->orWhere('description', 'ILIKE', "%{$search}%");
+                $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%'])
+                  ->orWhereRaw('LOWER(description) LIKE ?', ['%' . strtolower($search) . '%']);
             });
         }
 
-        $products = $query->latest()->paginate(12);
+        return $query->latest()->paginate(12)->toArray();
+    });
 
-        return response()->json($products);
-    }
+    return response()->json($products);
+}
 
     /**
      * Get single product
@@ -100,9 +101,19 @@ class ProductController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $product = Product::with('category')
-            ->where('is_active', true)
-            ->findOrFail($id);
+        try {
+            $product = Cache::remember("product_{$id}", 300, function () use ($id) {
+                return Product::with('category')
+                    ->where('is_active', true)
+                    ->where('id', $id)
+                    ->firstOrFail()
+                    ->toArray();
+            });
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Product not found.',
+            ], 404);
+        }
 
         return response()->json([
             'product' => $product,

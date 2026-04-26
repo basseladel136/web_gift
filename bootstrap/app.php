@@ -16,8 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'set_locale' => \App\Http\Middleware\SetLocale::class,
         ]);
 
-        // Apply locale middleware to all API routes
-        $middleware->appendToGroup('api', \App\Http\Middleware\SetLocale::class);
+        // Add security headers to all requests
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

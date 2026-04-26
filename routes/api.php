@@ -17,8 +17,8 @@ use App\Http\Controllers\Api\PushNotificationController;
 |--------------------------------------------------------------------------
 */
 
-// Auth
-Route::prefix('auth')->group(function () {
+// Auth — throttled: max 10 attempts per minute per IP (brute-force protection)
+Route::prefix('auth')->middleware('throttle:10,1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login',    [AuthController::class, 'login']);
 });

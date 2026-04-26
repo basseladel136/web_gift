@@ -57,7 +57,10 @@ class AnalyticsController extends Controller
      */
     public function sales(Request $request): JsonResponse
     {
-        $period     = $request->input('period', 'month');
+        $validated  = $request->validate([
+            'period' => ['sometimes', 'string', 'in:today,week,month,year,all'],
+        ]);
+        $period     = $validated['period'] ?? 'month';
         $dateFilter = $this->getDateFilter($period);
 
         return response()->json([
@@ -102,7 +105,10 @@ class AnalyticsController extends Controller
      */
     public function customers(Request $request): JsonResponse
     {
-        $period     = $request->input('period', 'month');
+        $validated  = $request->validate([
+            'period' => ['sometimes', 'string', 'in:today,week,month,year,all'],
+        ]);
+        $period     = $validated['period'] ?? 'month';
         $dateFilter = $this->getDateFilter($period);
 
         $newCustomers = User::where('is_admin', false)

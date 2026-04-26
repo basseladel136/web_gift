@@ -112,7 +112,13 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->tokens()->delete();
+        // Revoke only the current device's token — other sessions stay active.
+        // We query by ID instead of calling delete() on the interface directly,
+        // because currentAccessToken() returns HasAbilities which has no delete().
+        $request->user()
+            ->tokens()
+            ->where('id', $request->user()->currentAccessToken()->id)
+            ->delete();
 
         return response()->json([
             'message' => __('messages.logout_success'),

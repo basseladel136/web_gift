@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
+
 
 /**
  * @group Categories
@@ -34,7 +36,9 @@ class CategoryController extends Controller
      */
     public function index(): JsonResponse
     {
-        $categories = Category::withCount('products')->get();
+        $categories = Cache::remember('categories', 600, function () {
+            return Category::withCount('products')->get();
+        });
 
         return response()->json([
             'categories' => $categories,

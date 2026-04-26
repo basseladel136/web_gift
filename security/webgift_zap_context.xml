@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+    <!-- =====================================================================
+         WebGift API — OWASP ZAP Context
+         Import this file via: ZAP → File → Import Context
+         ===================================================================== -->
+    <context>
+        <name>WebGift API</name>
+        <desc>Security scan context for the WebGift Laravel REST API</desc>
+        <inscope>true</inscope>
+
+        <!-- Target URLs in scope -->
+        <incregexes>http://webgift\.test.*</incregexes>
+        <incregexes>http://localhost.*</incregexes>
+
+        <!-- Exclude static/unrelated paths -->
+        <excregexes>http://webgift\.test/storage.*</excregexes>
+        <excregexes>http://webgift\.test/_debugbar.*</excregexes>
+
+        <!-- Authentication: Sanctum Bearer token -->
+        <authentication>
+            <type>3</type>  <!-- Script-based auth -->
+            <strategy>1</strategy>  <!-- Send token on every request -->
+            <loggedindicator>
+                <pattern>"token"</pattern>
+            </loggedindicator>
+            <loggedoutindicator>
+                <pattern>Unauthenticated</pattern>
+            </loggedoutindicator>
+        </authentication>
+
+        <!-- Session management: HTTP header -->
+        <sessionmanagement>
+            <type>2</type>
+            <parameters>
+                <parameter>
+                    <name>headerName</name>
+                    <value>Authorization</value>
+                </parameter>
+                <parameter>
+                    <name>headerValue</name>
+                    <value>Bearer {%token%}</value>
+                </parameter>
+            </parameters>
+        </sessionmanagement>
+
+        <!-- Users for authenticated scanning -->
+        <users>
+            <user>
+                <id>1</id>
+                <name>regular_user</name>
+                <credentials>
+                    <credential>
+                        <name>email</name>
+                        <value>test@webgift.test</value>
+                    </credential>
+                    <credential>
+                        <name>password</name>
+                        <value>password</value>
+                    </credential>
+                </credentials>
+                <enabled>true</enabled>
+            </user>
+        </users>
+
+        <!-- Technology stack (helps ZAP choose attack vectors) -->
+        <tech>
+            <include>Db.PostgreSQL</include>
+            <include>Lang.PHP</include>
+            <include>Framework.Laravel</include>
+            <include>OS.Linux</include>
+        </tech>
+    </context>
+</configuration>

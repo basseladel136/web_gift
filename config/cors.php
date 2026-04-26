@@ -5,7 +5,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:3000',    // React dev    
+        'https://yourdomain.com',   // Production
+    ],
 
     'allowed_origins_patterns' => [],
 

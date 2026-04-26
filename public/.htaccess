@@ -23,3 +23,24 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# ---------------------------------------------------------------
+# Security Headers (ZAP fixes) — applied at Apache layer
+# Catches static file requests that never reach PHP/Laravel
+# ---------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Fix: Server Leaks "X-Powered-By" (ZAP Alert #6)
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
+
+    # Fix: Server Leaks Version via "Server" header (ZAP Alert #7)
+    # Note: ServerTokens Prod in httpd.conf shortens it; this removes it entirely
+    Header always unset Server
+    Header unset Server
+
+    # Fix: X-Content-Type-Options (backup layer)
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Fix: Anti-clickjacking (backup layer)
+    Header always set X-Frame-Options "DENY"
+</IfModule>
